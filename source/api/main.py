@@ -7,7 +7,7 @@ Create API
 from pydantic import BaseModel
 from fastapi.responses import HTMLResponse
 from fastapi import FastAPI
-import panda as pd
+import pandas as pd
 import joblib
 import os
 import wandb
@@ -93,4 +93,4 @@ async def get_inference(person: Person):
     # Predict test data
     predict = pipe.predict(df)
 
-    return "low income <=50K" if predict[0] <= 0.5 else "high income >50k"
+    return "low income <=50K" if predict[0] <= 0.5 else "high income >50K"

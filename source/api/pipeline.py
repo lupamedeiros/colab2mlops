@@ -36,12 +36,12 @@ class CategoricalTransformer(BaseEstimator, TransformerMixin):
     def get_feature_names_out(self):
         return self.colnames.tolist()
 
-    # Transform method we wrote for this transformer
+    # Transformer method we wrote for this transformer
     def transform(self, X, y=None):
         df = pd.DataFrame(X, columns=self.colnames)
 
         # Remove white space in categorical features
-        df = df.apply(lambda row: row.str.strp())
+        df = df.apply(lambda row: row.str.strip())
 
         # customize feature?
         # How can I identify what needs to be modified? EDA!!!!
@@ -51,39 +51,39 @@ class CategoricalTransformer(BaseEstimator, TransformerMixin):
             # check cardinality using df.native_country.unique()
             df.loc[df['native_country'] != 'United-States','native_country'] = 'non_usa'
 
-        # replace ? with Unknown
-        edit_cols = ['native_country', 'occupation', 'workclass']
-        for col in edit_cols:
-            df.loc[df[col] == '?', col] = 'unknown'
+            # replace ? with Unknown
+            edit_cols = ['native_country', 'occupation', 'workclass']
+            for col in edit_cols:
+                df.loc[df[col] == '?', col] = 'unknown'
 
-        # decrease the cardinality of education feature
-        hs_grad = ['HS-grad', '11th', '10th', '9th', '12th']
-        elementary = ['1st-4th', '5th-6th', '7th-8th']
-        #replace
-        df['education'].replace(to_replace=hs_grad,value='HS-grad',inplace=True)
-        df['education'].replace(to_replace=elementary,value="elementary_school",inplace=True)
+            # decrease the cardinality of education feature
+            hs_grad = ['HS-grad', '11th', '10th', '9th', '12th']
+            elementary = ['1st-4th', '5th-6th', '7th-8th']
+            # replace
+            df['education'].replace(to_replace=hs_grad,value='HS-grad',inplace=True)
+            df['education'].replace(to_replace=elementary,value='elementary_school',inplace=True)
 
-        # adjust marital_status feature
-        married = ['Married-spouse-absent', 'Married-civ-spouse', 'Married-AF-spouse']
-        separeted = ['Separated', 'Divorced']
+            # adjust marital_status feature
+            married = ['Married-spouse-absent','Married-civ-spouse','Married-AF-spouse']
+            separated = ['Separated', 'Divorced']
 
-        # replace
-        df['marital_status'].replace(to_replace=married, value='Married', inplace=True)
-        df['marital_status'].replace(to_replace=separeted, value='Separeted', inplace=True)
+            # replace
+            df['marital_status'].replace(to_replace=married, value='Married', inplace=True)
+            df['marital_status'].replace(to_replace=separated, value='Separated', inplace=True)
 
-        # adjust workclass feature
-        self_employed = ["Sem-emp-not-inc", "Self-emp-inc"]
-        govt_employees = ["Local-gov", "State-gov", "Federal-gov"]
+            # adjust workclass feature
+            self_employed = ['Self-emp-not-inc', 'Self-emp-inc']
+            govt_employees = ['Local-gov', 'State-gov', 'Federal-gov']
 
-        # replace elements in list
-        df['workclass'].replace(to_replace=self_employed, value="Self_employed", inplace=True)
-        df['workclass'].replace(to_replace=govt_employees, value="Govt_employees", inplace=True)
+            # replace elements in list.
+            df['workclass'].replace(to_replace=self_employed,value='Self_employed',inplace=True)
+            df['workclass'].replace(to_replace=govt_employees,value='Govt_employees',inplace=True)
 
         # update column names
-        self.colnames = df.colnames
+        self.colnames = df.columns
 
         return df
-
+        
 # transform numerical features
 class NumericalTransformer(BaseEstimator, TransformerMixin):
     # Class constructor method that takes a model parameter as its argument
@@ -109,12 +109,12 @@ class NumericalTransformer(BaseEstimator, TransformerMixin):
         return self
 
     # return columns names after transformation
-    def get_features_name_out(self):
+    def get_feature_names_out(self):
         return self.colnames
 
-    # Transform method we worte for this transformer
-    # Use fitted scallers
-    def trasnform(self, X, y=None):
+    # Transformer method we wrote for this transformer
+    # Use fitted scalers
+    def transform(self, X, y=None):
         df = pd.DataFrame(X, columns=self.colnames)
 
         # update columns name

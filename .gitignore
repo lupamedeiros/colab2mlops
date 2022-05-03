@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# WANDB
+wandb/
+artifacts/
+
 # C extensions
 *.so
 
